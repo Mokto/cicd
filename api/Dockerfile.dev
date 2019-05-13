@@ -1,0 +1,17 @@
+FROM node:10-alpine
+
+ARG SCRIPT
+ENV SCRIPT ${SCRIPT}
+WORKDIR /opt/backend
+EXPOSE 3000
+
+ADD package.json .
+ADD package-lock.json .
+RUN npm install
+
+COPY ./main.js ./
+COPY ./tsconfig.json ./
+COPY ./.babelrc ./
+COPY ./src ./src
+
+CMD ["node", "main"]

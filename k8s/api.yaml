@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: gcr.io/k8s-skaffold/api
+        volumeMounts:
+          - name: workdir-volume
+            mountPath: /opt/backend/workdir
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+      volumes:
+        - name: workdir-volume
+          persistentVolumeClaim:
+            claimName: pvc-workdir
