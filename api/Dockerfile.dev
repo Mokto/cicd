@@ -1,5 +1,7 @@
 FROM node:10-alpine
 
+RUN apk add --no-cache git
+
 ARG SCRIPT
 ENV SCRIPT ${SCRIPT}
 WORKDIR /opt/backend

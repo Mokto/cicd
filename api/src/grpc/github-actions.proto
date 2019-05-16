@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package protos;
+
+service GithubActions {
+  rpc ParseWorkflow (WorkflowRequest) returns (WorkflowResponse) {}
+}
+
+message WorkflowRequest {
+  string fileContent = 1;
+}
+
+message WorkflowResponse {
+  repeated Action actions = 1;
+  repeated Workflow workflows = 2;
+}
+
+message Workflow {
+  string Identifier = 1;
+  string On = 2;
+  repeated string Resolves = 3;
+}
+
+message Action {
+  string Identifier = 1;
+  string Uses = 2;
+  repeated string Runs = 3;
+  repeated string Args = 4;
+  repeated string Needs = 5;
+  map<string, string> Env = 6;
+  repeated string Secrets = 7;
+}

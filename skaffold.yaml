@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta10
 kind: Config
 build:
   artifacts:
-  - image: gcr.io/k8s-skaffold/api
+  - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-api
     context: ./api
     docker:
       dockerfile: Dockerfile.dev
@@ -12,6 +12,12 @@ build:
       manual:
       - src: 'src/**/*.ts'
         dest: .
+  - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-go
+    context: ./go
+    docker:
+      dockerfile: Dockerfile.dev
+      buildArgs:
+        SCRIPT: "{{.SCRIPT}}"
 
   # - image: gcr.io/k8s-skaffold/frontend
   #   context: ./frontend

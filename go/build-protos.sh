@@ -2,23 +2,20 @@
 
 cd protos
 
-# protoc -I=. *.proto \
-#   --js_out=import_style=commonjs:../frontend/src/protos \
-#   --grpc-web_out=import_style=commonjs,mode=grpcwebtext:../frontend/src/protos
-#   # --grpc-web_out=import_style=typescript,mode=grpcwebtext:../frontend/src/protos
+protoc --go_out=plugins=grpc:. *.proto
 
-PROTOC_GEN_TS_PATH="../frontend/node_modules/.bin/protoc-gen-ts"
+cp *.proto ../../api/src/grpc
+
+PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
  
 # Directory to write generated code to (.js and .d.ts files) 
-OUT_DIR="../frontend/src/protos"
+OUT_DIR="../../api/src/grpc"
  
 protoc \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
-    --ts_out="service=true:${OUT_DIR}" \
-    *.proto
-
-protoc --go_out=plugins=grpc:. *.proto
+    --ts_out="${OUT_DIR}" \
+    github-actions.proto
 
 cd ..
 # rm -f protos/*.js
