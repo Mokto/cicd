@@ -1,5 +1,5 @@
 import git from 'simple-git/promise';
-const remote = `https://github.com/hashicorp/docker-vault`;
+const remote = `https://github.com/Mokto/docker-kaniko-test.git`;
 
 import fs from 'fs';
 
@@ -11,15 +11,14 @@ export const getLatestOfGit = async () => {
         // if (fs.existsSync('./workdir/sales-ext')) {
         //     fs.rmdirSync('./workdir/sales-ext');
         // }
-        const shouldClone = fs.existsSync('./workdir/vault');
-
-        const repo: any = shouldClone ?
-            git('./workdir/vault') :
-            git('./workdir').silent(true).clone(remote, './vault')
-
-        if (!shouldClone) {
-            const status = await repo.status();    
+        if (!fs.existsSync('./workdir/test')) {
+            console.log('Cloning project');
+            await git('./workdir').silent(true).clone(remote, './test')
         }
+
+        const repo: any = git('./workdir/test');
+        // const status = await repo.status();    
+        // console.log(status);
         
         // console.log(status);
         console.log('finished')

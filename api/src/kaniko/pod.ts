@@ -7,8 +7,8 @@ export const initKanikoPod = (namespace: string) => {
         name: 'kaniko',
         image: 'gcr.io/kaniko-project/executor:latest',
         args: [
-            "--dockerfile=/git/vault/0.X/Dockerfile",
-            "--context=dir://git/vault/0.X",
+            "--dockerfile=/git/test/Dockerfile",
+            "--context=dir://git/test",
             "--destination=cicd-docker-registry:5000/test/develop:1", 
             "--insecure",
             "--insecure-pull",
