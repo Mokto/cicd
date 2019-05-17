@@ -4,7 +4,8 @@ metadata:
   name: pvc-workdir
   namespace: cicd
 spec:
-  accessModes: [ "ReadWriteOnce" ]
+  accessModes: [ "ReadWriteMany" ]
+  storageClassName: efs
   resources:
     requests:
       storage: 4Gi
