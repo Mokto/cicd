@@ -2,7 +2,7 @@ const crypto = require('crypto');
 
 export const generateRandomHash = (length: number = 8) => {
     return new Promise((resolve, reject) => {
-        crypto.randomBytes(length, (err, buf) => {
+        crypto.randomBytes(length, (err: Error, buf: Buffer) => {
             if (err) {
                 return reject(err);
             }

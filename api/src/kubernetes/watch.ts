@@ -1,34 +1,26 @@
 import { K8S } from "./_api";
-const JSONStream = require('json-stream')
+import {config} from "../config";
+// @ts-ignore
+import JSONStream from 'json-stream';
 
-export const testKubernetes = async () => {
+export const watchKubernetes = async () => {
     await K8S.waitReady();
 
-        
-    const stream = await K8S.client.api.v1.namespaces('cicd').pods.getStream();
+    const stream = K8S.client.api.v1.watch.namespaces(config.namespace).pods.getStream();
 
       const jsonStream = new JSONStream()
       stream.pipe(jsonStream)
-      jsonStream.on('data', (object: any) => {
-          console.log(object.items.map(i => i.metadata.name));
-        //   console.log('Event');
-        //   console.log(object);
+      jsonStream.on('data', (event: {type: string, object: any}) => {
+        const podName = event.object.metadata.name;
+        if (podName.indexOf('runner-') === -1) {
+          return;
+        }
+
+        const phase = event.object.status.phase;
+        if (phase === 'Succeeded') {
+          console.log('To delete');
+        }
       });
 
       console.log('LISTENING')
-    
-    // const stream = await K8S.client.api.v1.watch.namespaces('cicd').pods('kaniko-*').get({
-    //     qs: {
-    //       container: 'kaniko'
-    //     }
-    //   });
-
-    //   const jsonStream = new JSONStream()
-    //   stream.pipe(jsonStream)
-    //   jsonStream.on('data', (object: any) => {
-    //       console.log('Event');
-    //       console.log(object);
-    //   });
-
-    //   console.log('LISTENING')
 }

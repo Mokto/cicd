@@ -1,8 +1,8 @@
 import { createJob } from "../kubernetes/createJob";
 
-export const initKanikoPod = (namespace: string, name: string) => {
-    return createJob(namespace, {
-        name
+export const initKanikoPod = (name: string) => {
+    return createJob({
+        name: `runner-${name}`
     }, [{
         name: 'kaniko',
         image: 'gcr.io/kaniko-project/executor:latest',
