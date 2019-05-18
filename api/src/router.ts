@@ -1,14 +1,20 @@
 import express, { Router } from 'express';
 import { initKanikoPod } from './kaniko/pod';
-// import { getLatestOfGit } from './git/latest';
+import { getLatestOfGit } from './git/latest';
 // import { parseWorkflow } from './grpc';
 // import { getWorkflows } from './utils/load-workflows';
-import { watchNamespace } from './kubernetes/watch';
+import { testKubernetes } from './kubernetes/watch';
 
 export const loadRoutes = (router: Router) => {
 
-    // getLatestOfGit();
-    watchNamespace();
+    // k8sClient
+    testKubernetes();
+
+    initKanikoPod('cicd');
+
+    getLatestOfGit();
+    // watchNamespace();
+    testKubernetes();
 
     // const a = async () => {
     //     const workflow = getWorkflows();
@@ -20,8 +26,8 @@ export const loadRoutes = (router: Router) => {
     router.get('/', async (_, res) => {
           
         try {
-            const {body} = await initKanikoPod('cicd');
-            console.log(body);
+            await initKanikoPod('cicd');
+            console.log('Pod inited');
         } catch (e) {
             console.error(e);
             return res.send({error: e.message || e})
@@ -34,16 +40,16 @@ export const loadRoutes = (router: Router) => {
 
     router.get('/logs', async (_, res) => {
           
-        try {
-            const {body} = await initKanikoPod('cicd');
-            console.log(body);
-        } catch (e) {
-            console.error(e);
-            return res.send({error: e.message || e})
-        }
+        // try {
+        //     const {body} = await initKanikoPod('cicd');
+        //     console.log(body);
+        // } catch (e) {
+        //     console.error(e);
+        //     return res.send({error: e.message || e})
+        // }
         
         res.send({
-            message: 'Pod created'
+            message: '!'
         })
     });
 

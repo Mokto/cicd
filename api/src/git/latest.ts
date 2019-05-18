@@ -14,6 +14,7 @@ export const getLatestOfGit = async () => {
         if (!fs.existsSync('./workdir/test')) {
             console.log('Cloning project');
             await git('./workdir').silent(true).clone(remote, './test')
+            console.log('Cloned');
         }
 
         const repo: any = git('./workdir/test');

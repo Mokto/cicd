@@ -1,35 +1,34 @@
-import {KubeConfig, Core_v1Api, Watch} from '@kubernetes/client-node';
-import { kubeConfig } from './_api-client';
+import { K8S } from "./_api";
+const JSONStream = require('json-stream')
 
-const watch = new Watch(kubeConfig);
-
-export const watchNamespace = () => {
-    console.log('Watch pods in namespace cicd');
-    watch.watch('/api/v1/namespaces/cicd/pods', {}, (type, obj) => {
-        // type
-        // 'ADDED'
-        // 'MODIFIED'
-        // 'DELETED'
-        const name = obj.metadata.name; 
-
-        if (type === 'ADDED' && name.indexOf('api-') > -1) {
-            watchPodLogs(name);
-            // console.log(name);
-        }
-    }, (err) => {
-        console.log(err);
-    });
+export const testKubernetes = async () => {
+    await K8S.waitReady();
 
         
-}
+    const stream = await K8S.client.api.v1.namespaces('cicd').pods.getStream();
 
+      const jsonStream = new JSONStream()
+      stream.pipe(jsonStream)
+      jsonStream.on('data', (object: any) => {
+          console.log(object.items.map(i => i.metadata.name));
+        //   console.log('Event');
+        //   console.log(object);
+      });
 
-const watchPodLogs = (name: string) => {
-    console.log(name);
-    // watch.watch(`/api/v1/namespaces/cicd/pods/${name}/log`, {}, () => {
-    //     console.log('LOG FOUND')
-    // }, (err) => {
-    //     console.log(err);
-    // });
-    // console.log('Now watching...');
+      console.log('LISTENING')
+    
+    // const stream = await K8S.client.api.v1.watch.namespaces('cicd').pods('kaniko-*').get({
+    //     qs: {
+    //       container: 'kaniko'
+    //     }
+    //   });
+
+    //   const jsonStream = new JSONStream()
+    //   stream.pipe(jsonStream)
+    //   jsonStream.on('data', (object: any) => {
+    //       console.log('Event');
+    //       console.log(object);
+    //   });
+
+    //   console.log('LISTENING')
 }

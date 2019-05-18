@@ -1,7 +1,7 @@
-import { createPod } from "../kubernetes/pod";
+import { createJob } from "../kubernetes/createJob";
 
 export const initKanikoPod = (namespace: string) => {
-    return createPod(namespace, {
+    return createJob(namespace, {
         name: 'kaniko'
     }, [{
         name: 'kaniko',
