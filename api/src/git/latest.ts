@@ -22,7 +22,7 @@ export const getLatestOfGit = async () => {
         // console.log(status);
         
         // console.log(status);
-        console.log('finished')
+        // console.log('finished')
     } catch (e) {
         console.error(e);
     }

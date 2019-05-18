@@ -2,8 +2,10 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require( 'nodemon-webpack-plugin' );
 
+const file = process.env.FILE || 'api';
+
 module.exports = {
-  entry: './src/main.ts',
+  entry: `./src/${file}.ts`,
   mode: process.env.NODE_ENV || 'development',
   target: 'node',
   externals: [nodeExternals()],

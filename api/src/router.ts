@@ -1,27 +1,23 @@
-import express, { Router } from 'express';
-import { initKanikoPod } from './kaniko/pod';
+import { Router } from 'express';
 import { getLatestOfGit } from './git/latest';
 // import { parseWorkflow } from './grpc';
 // import { getWorkflows } from './utils/load-workflows';
-import { watchKubernetes } from './kubernetes/watch';
-import { generateRandomHash } from './utils/random-hash';
+import { runKanikoStep } from './runners/kaniko';
+import { loadWatcher } from './queues/watch-pods';
 
 
 export const loadRoutes = (router: Router) => {
 
     // k8sClient
-    watchKubernetes();
+    // watchKubernetes();
 
 
-
+    loadWatcher();
 
 
     router.post('/build', async (_, res) => {
-
-        const hash = await generateRandomHash();
-          
         await getLatestOfGit();
-        await initKanikoPod(`kaniko-${hash}`);
+        await runKanikoStep('test');
         
         res.send({
             message: '!'
