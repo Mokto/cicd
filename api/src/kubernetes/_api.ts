@@ -14,11 +14,10 @@ export class K8S {
     }
 
     static async waitReady() {
+        if (this.ready) {
+            return;
+        }
         return new Promise(resolve => {
-            if (this.ready) {
-                return;
-            }
-
             this.callbacks.push(resolve);
         });
     }

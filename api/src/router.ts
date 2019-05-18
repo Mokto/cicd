@@ -4,17 +4,19 @@ import { getLatestOfGit } from './git/latest';
 // import { parseWorkflow } from './grpc';
 // import { getWorkflows } from './utils/load-workflows';
 import { testKubernetes } from './kubernetes/watch';
+import { generateRandomHash } from './utils/random-hash';
+
 
 export const loadRoutes = (router: Router) => {
 
     // k8sClient
     testKubernetes();
 
-    initKanikoPod('cicd');
+    // initKanikoPod('cicd');
 
-    getLatestOfGit();
+    // getLatestOfGit();
     // watchNamespace();
-    testKubernetes();
+    // testKubernetes();
 
     // const a = async () => {
     //     const workflow = getWorkflows();
@@ -26,7 +28,7 @@ export const loadRoutes = (router: Router) => {
     router.get('/', async (_, res) => {
           
         try {
-            await initKanikoPod('cicd');
+            // await initKanikoPod('cicd');
             console.log('Pod inited');
         } catch (e) {
             console.error(e);
@@ -40,6 +42,28 @@ export const loadRoutes = (router: Router) => {
 
     router.get('/logs', async (_, res) => {
           
+        // try {
+        //     const {body} = await initKanikoPod('cicd');
+        //     console.log(body);
+        // } catch (e) {
+        //     console.error(e);
+        //     return res.send({error: e.message || e})
+        // }
+        
+        res.send({
+            message: ''
+        })
+    });
+
+
+    router.post('/build', async (_, res) => {
+
+        const hash = await generateRandomHash();
+          
+        await getLatestOfGit();
+        console.log('git step done')
+        await initKanikoPod('cicd', `kaniko-${hash}`);
+        console.log('init Kaniko job done')
         // try {
         //     const {body} = await initKanikoPod('cicd');
         //     console.log(body);
