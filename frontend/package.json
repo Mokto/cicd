@@ -6,6 +6,8 @@
     "@improbable-eng/grpc-web": "^0.9.5",
     "@kubernetes/client-node": "^0.8.2",
     "@types/google-protobuf": "^3.2.7",
+    "antd": "^3.18.1",
+    "axios": "^0.18.0",
     "google-protobuf": "^3.8.0-rc.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
