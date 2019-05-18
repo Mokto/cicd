@@ -1,9 +1,9 @@
-import { IWorkflowResponse } from "./models";
+import { IWorkflowResponse } from '../models/workflows';
 
 import * as grpc from 'grpc';
 import * as protoLoader from '@grpc/proto-loader';
 
-const packageDefinition = protoLoader.loadSync(`${__dirname}/github-actions.proto`, {
+const packageDefinition = protoLoader.loadSync(`./src/grpc/github-actions.proto`, {
     keepCase: true,
     longs: String,
     enums: String,

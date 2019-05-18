@@ -10,7 +10,7 @@ build:
         SCRIPT: "{{.SCRIPT}}"
     sync:
       manual:
-      - src: 'src/**/*.ts'
+      - src: 'src/**/*'
         dest: .
   - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-go
     context: ./go
