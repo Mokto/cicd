@@ -7,7 +7,7 @@ class K8S {
   private ready = false;
   private callbacks: (() => void)[] = [];
 
-  public contructor() {
+  public constructor() {
     this.init();
   }
 
