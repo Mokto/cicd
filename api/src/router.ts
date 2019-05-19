@@ -4,6 +4,7 @@ import { parseWorkflow } from './grpc';
 import { getWorkflows } from './utils/load-workflows';
 import { runKanikoStep } from './runners/kaniko';
 import { loadWatcher } from './queues/watch-pods';
+import { loadWebsocketServer } from './sockets';
 // import { watchAndDelete } from './kubernetes/watch';
 
 
@@ -14,7 +15,7 @@ export const loadRoutes = (router: Router) => {
 
     if (process.env.NODE_ENV !== 'production') {
         loadWatcher();
-        // watchAndDelete();
+        loadWebsocketServer();
     }
 
     router.get('/workflows', async (_, res) => {

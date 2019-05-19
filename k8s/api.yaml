@@ -28,7 +28,7 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
-          - name: httpWebsocket
+          - name: http-websocket
             containerPort: 8081
             protocol: TCP
       volumes:
