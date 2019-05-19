@@ -6,7 +6,6 @@ const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
 export const AppMenu: FunctionComponent = () => {
-
   return (
     <Sider width={300} style={{ background: '#fff' }}>
       <Menu
@@ -22,7 +21,7 @@ export const AppMenu: FunctionComponent = () => {
             <span>
               <Icon type="user" />
               subnav 1
-              </span>
+            </span>
           }
         >
           <Menu.Item key="1">option1</Menu.Item>
@@ -36,7 +35,7 @@ export const AppMenu: FunctionComponent = () => {
             <span>
               <Icon type="laptop" />
               subnav 2
-              </span>
+            </span>
           }
         >
           <Menu.Item key="5">option5</Menu.Item>
@@ -46,5 +45,5 @@ export const AppMenu: FunctionComponent = () => {
         </SubMenu>
       </Menu>
     </Sider>
-  )
-}
+  );
+};
