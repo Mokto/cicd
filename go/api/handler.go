@@ -15,7 +15,7 @@ type Server struct {
 // ParseWorkflow parse the workflow and returns
 func (s *Server) ParseWorkflow(ctx context.Context, req *protos.WorkflowRequest) (*protos.WorkflowResponse, error) {
 
-	config, err := parser.Parse(strings.NewReader(req.FileContent))
+	config, err := parser.Parse(strings.NewReader(req.FileContent), parser.WithSuppressErrors())
 	if err != nil {
 		return nil, err
 	}

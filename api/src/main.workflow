@@ -1,10 +1,15 @@
 workflow "Workflow" {
-  on = "push"
+  on = "@github/push"
+  resolves = ["Clone project"]
+}
+
+workflow "Workflow2" {
+  on = "@github/push"
   resolves = ["Clone project"]
 }
 
 action "Clone project" {
-  uses = "./github/clone"
+  uses = "@github/clone"
   args = ["Mokto/docker-kaniko-test"]
 }
 
