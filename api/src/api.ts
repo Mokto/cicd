@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import { loadRoutes } from './router';
+import { loadRoutes } from './routes/routes';
 
 const port = 8080;
 

@@ -1,6 +1,6 @@
 import { rabbitMQ } from '../db/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
-import { watchPodFromJob } from '../kubernetes/watch';
+import { watchPodFromJob } from '../modules/kubernetes/watch';
 
 export const watchPodsQueueName = 'watchPods2';
 

@@ -1,21 +1,10 @@
 import { Router } from 'express';
-import { getLatestOfGit } from './git/latest';
-import { parseWorkflow } from './grpc';
-import { getWorkflows } from './utils/load-workflows';
-import { runKanikoStep } from './runners/kaniko';
-import { loadWatcher } from './queues/watch-pods';
-import { loadWebsocketServer } from './sockets';
-// import { watchAndDelete } from './kubernetes/watch';
+import { getLatestOfGit } from '../modules/git/latest';
+import { parseWorkflow } from '../modules/grpc';
+import { getWorkflows } from '../utils/load-workflows';
+import { runKanikoStep } from '../modules/runners/kaniko';
 
 export const loadRoutes = (router: Router) => {
-  // k8sClient
-  // watchKubernetes();
-
-  if (process.env.NODE_ENV !== 'production') {
-    loadWatcher();
-    loadWebsocketServer();
-  }
-
   router.get('/workflows', async (_, res) => {
     const workflowsString = await getWorkflows();
     const workflows = await parseWorkflow(workflowsString);

@@ -1,5 +1,5 @@
 import { k8s } from './_api';
-import { config } from '../config';
+import { config } from '../../config';
 
 export const createJob = async (name: string, containerSpec: any) => {
   await k8s.waitReady();

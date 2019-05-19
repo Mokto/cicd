@@ -1,7 +1,7 @@
 import { createJob } from '../kubernetes/createJob';
-import { generateRandomHash } from '../utils/random-hash';
-import { rabbitMQ } from '../db/rabbitmq';
-import { watchPodsQueueName } from '../queues/watch-pods';
+import { generateRandomHash } from '../../utils/random-hash';
+import { rabbitMQ } from '../../db/rabbitmq';
+import { watchPodsQueueName } from '../../queues/watch-pods';
 
 export const runDockerStep = async (containerSpec: any) => {
   const hash = await generateRandomHash();

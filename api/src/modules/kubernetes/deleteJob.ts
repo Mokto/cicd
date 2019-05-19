@@ -1,5 +1,5 @@
 import { k8s } from './_api';
-import { config } from '../config';
+import { config } from '../../config';
 
 export const deleteJob = async (jobName: string, podName: string) => {
   await k8s.waitReady();

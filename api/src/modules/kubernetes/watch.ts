@@ -1,5 +1,5 @@
 import { k8s } from './_api';
-import { config } from '../config';
+import { config } from '../../config';
 // @ts-ignore
 import JSONStream from 'json-stream';
 import { deleteJob } from './deleteJob';
