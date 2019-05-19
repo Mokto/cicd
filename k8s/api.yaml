@@ -28,6 +28,9 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
+          - name: httpWebsocket
+            containerPort: 8081
+            protocol: TCP
       volumes:
         - name: workdir-volume
           persistentVolumeClaim:

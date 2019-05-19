@@ -22,6 +22,7 @@
     "json-stream": "^1.0.0",
     "kubernetes-client": "^7.0.1",
     "simple-git": "^1.113.0",
+    "ws": "^7.0.0",
     "yaml": "^1.5.1"
   },
   "devDependencies": {
@@ -39,5 +40,9 @@
     "webpack-dev-server": "^3.3.1",
     "webpack-merge": "^4.2.1",
     "webpack-node-externals": "^1.7.2"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   }
 }
