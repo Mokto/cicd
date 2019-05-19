@@ -7,37 +7,35 @@ import { loadWatcher } from './queues/watch-pods';
 import { loadWebsocketServer } from './sockets';
 // import { watchAndDelete } from './kubernetes/watch';
 
-
 export const loadRoutes = (router: Router) => {
+  // k8sClient
+  // watchKubernetes();
 
-    // k8sClient
-    // watchKubernetes();
+  if (process.env.NODE_ENV !== 'production') {
+    loadWatcher();
+    loadWebsocketServer();
+  }
 
-    if (process.env.NODE_ENV !== 'production') {
-        loadWatcher();
-        loadWebsocketServer();
-    }
+  router.get('/workflows', async (_, res) => {
+    const workflowsString = await getWorkflows();
+    const workflows = await parseWorkflow(workflowsString);
 
-    router.get('/workflows', async (_, res) => {
-        const workflowsString = await getWorkflows();
-        const workflows = await parseWorkflow(workflowsString);
+    res.send({ ...workflows });
+  });
 
-        res.send({...workflows});
-    });
+  router.post('/build', async (req, res) => {
+    const { workflowIdentifier } = req.body;
 
-    router.post('/build', async (req, res) => {
-        const {workflowIdentifier} = req.body;
+    const workflowsString = await getWorkflows();
+    const { workflows } = await parseWorkflow(workflowsString);
+    const workflow = workflows.find(w => w.Identifier === workflowIdentifier);
 
-        const workflowsString = await getWorkflows();
-        const {workflows} = await parseWorkflow(workflowsString);
-        const workflow = workflows.find(w => w.Identifier === workflowIdentifier);
+    console.log(workflow);
+    await getLatestOfGit();
+    await runKanikoStep('test');
 
-        console.log(workflow);
-        await getLatestOfGit();
-        await runKanikoStep('test');
-        
-        res.send();
-    });
+    res.send();
+  });
 
-    return router;
-}
+  return router;
+};

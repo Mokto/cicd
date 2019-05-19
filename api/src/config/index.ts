@@ -1,7 +1,7 @@
-interface IConfig {
-    namespace: string;
+interface Config {
+  namespace: string;
 }
 
-export const config: IConfig = {
-    namespace: 'cicd'
-}
+export const config: Config = {
+  namespace: 'cicd',
+};

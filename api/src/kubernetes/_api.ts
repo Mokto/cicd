@@ -1,26 +1,30 @@
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 
-export class K8S {
-    static client = new Client({ config: config.getInCluster() });
+class K8S {
+  public client = new Client({ config: config.getInCluster() });
 
-    static ready = false;
-    static callbacks: Array<() => void> = [];
+  private ready = false;
+  private callbacks: (() => void)[] = [];
 
-    static async init() {
-        await K8S.client.loadSpec();
-        this.ready = true;
-        this.callbacks.forEach(cb => cb());
+  public contructor() {
+    this.init();
+  }
+
+  private async init() {
+    await this.client.loadSpec();
+    this.ready = true;
+    this.callbacks.forEach(cb => cb());
+  }
+
+  public async waitReady() {
+    if (this.ready) {
+      return;
     }
-
-    static async waitReady() {
-        if (this.ready) {
-            return;
-        }
-        return new Promise(resolve => {
-            this.callbacks.push(resolve);
-        });
-    }
+    return new Promise(resolve => {
+      this.callbacks.push(resolve);
+    });
+  }
 }
 
-K8S.init();
+export const k8s = new K8S();

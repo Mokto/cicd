@@ -1,3 +1,3 @@
-import { loadWatcher } from "./queues/watch-pods";
+import { loadWatcher } from './queues/watch-pods';
 
 loadWatcher();

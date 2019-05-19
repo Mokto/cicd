@@ -1,6 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const NodemonPlugin = require( 'nodemon-webpack-plugin' );
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const file = process.env.FILE || 'api';
 
@@ -12,7 +12,7 @@ module.exports = {
   stats: 'errors-only',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
   resolve: {
     extensions: ['.ts', '.js'],
@@ -21,13 +21,11 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: [
-          'ts-loader',
-        ]
-      }
-    ]
+        use: ['ts-loader'],
+      },
+    ],
   },
   plugins: [
     new NodemonPlugin(), // Dong
-  ]
-}
+  ],
+};

@@ -1,5 +1,7 @@
 import amqplib from 'amqplib';
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 class RabbitMQ {
   public db: amqplib.Channel;
 
@@ -7,7 +9,7 @@ class RabbitMQ {
   private promises: any[] = [];
   private reconnectCb: any[] = [];
 
-  constructor() {
+  public constructor() {
     this.init();
   }
 
@@ -53,5 +55,3 @@ class RabbitMQ {
 }
 
 export const rabbitMQ = new RabbitMQ();
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -13,6 +13,7 @@ module.exports =  {
   rules: {
     '@typescript-eslint/explicit-function-return-type': false,
     '@typescript-eslint/no-explicit-any': false,
-    'react/prop-types': false
+    'react/prop-types': false,
+    '@typescript-eslint/no-use-before-define': false
   }
 };
