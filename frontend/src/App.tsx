@@ -4,14 +4,19 @@ import { Button, Divider } from 'antd';
 import { AppLayout } from './layout';
 import { startBuildApi, getWorkflowsApi } from './api';
 import { useAsyncEffect } from './effects/async';
-import { IWorkflowResponse } from '../../api/src/models/workflows';
+import { WorkflowResponse } from '../../api/src/models/workflows';
+import { websocket } from './services/websocket';
 
 export const App: React.FC = (): ReactElement => {
-  const [workflowsDefinition, setWorkflowsDefinition] = useState<IWorkflowResponse>();
+  const [workflowsDefinition, setWorkflowsDefinition] = useState<WorkflowResponse>();
 
   useAsyncEffect(async () => {
     const result = await getWorkflowsApi();
     setWorkflowsDefinition(result);
+  }, []);
+
+  useAsyncEffect(async () => {
+    console.log(websocket);
   }, []);
 
   return (
@@ -21,7 +26,7 @@ export const App: React.FC = (): ReactElement => {
           {workflowsDefinition &&
             workflowsDefinition.workflows.map(workflow => {
               return (
-                <>
+                <div key={workflow.Identifier}>
                   <Divider orientation="left">{workflow.Identifier}</Divider>
                   <Button
                     type="primary"
@@ -32,7 +37,7 @@ export const App: React.FC = (): ReactElement => {
                   >
                     Build
                   </Button>
-                </>
+                </div>
               );
             })}
         </div>
