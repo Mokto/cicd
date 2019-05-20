@@ -15,8 +15,6 @@ export const watchPodFromJob = async (jobName: string) => {
   const jsonStream = new JSONStream();
   stream.pipe(jsonStream);
 
-  let streamLogs: any;
-
   return new Promise(resolve => {
     jsonStream.on('data', (event: { type: string; object: any }) => {
       const podName = event.object.metadata.name;
@@ -24,12 +22,11 @@ export const watchPodFromJob = async (jobName: string) => {
       console.log(podName, phase);
 
       if (phase === 'Running') {
-        streamLogs = watchPodLogs(podName);
+        watchPodLogs(podName);
       }
 
       if (phase === 'Succeeded') {
         stream.abort();
-        console.log(streamLogs);
         deleteJob(jobName, podName);
         resolve();
       }
@@ -44,31 +41,10 @@ export const watchPodLogs = async (podName: string) => {
     .namespaces(config.namespace)
     .pods(podName)
     .log.getStream({
-      qs: { tailLines: 10, follow: true },
+      qs: { follow: true },
     });
-  const jsonStream = new JSONStream();
-  stream.pipe(jsonStream);
 
-  jsonStream.on('data', (data: any) => {
-    console.log(data);
+  stream.on('data', (data: any) => {
+    console.log(data.toString('utf8').replace(/\n/g, ''));
   });
-
-  return stream;
 };
-
-// export const watchAndDelete = async () => {
-//   await k8s.waitReady();
-//   const stream = k8s.client.api.v1.watch.namespaces(config.namespace).pods.getStream();
-//   const jsonStream = new JSONStream()
-//   stream.pipe(jsonStream);
-
-//   console.log('----------')
-
-//   jsonStream.on('data', (event: {type: string, object: any}) => {
-//     const podName = event.object.metadata.name;
-//     const jobName = event.object.metadata.labels['job-name'];
-//     if (podName.indexOf('runner-') > -1) {
-//       deleteJob(jobName, podName);
-//     }
-//   });
-// }
