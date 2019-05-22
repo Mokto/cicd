@@ -13,9 +13,9 @@ action "Clone project" {
   args = ["Mokto/docker-kaniko-test"]
 }
 
-action "HTTP client" {
+action "Docker build" {
   needs = ["Clone project"]
-  uses = "Ilshidur/action-slack@master"
-  secrets = ["SLACK_WEBHOOK"]
-  args = "A new commit has been pushed"
+  uses = "@docker/build"
+  # secrets = ["SLACK_WEBHOOK"]
+  args = ["repo/image"]
 }

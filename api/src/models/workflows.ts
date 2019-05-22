@@ -1,19 +1,19 @@
 export interface Action {
   Identifier: string;
-  uses: string;
-  needs: string | string[];
-  runs: string | string[];
-  args: string | string[];
-  env: {
+  Uses: string;
+  Needs: string | string[];
+  Runs: string | string[];
+  Args: string | string[];
+  Env: {
     [key: string]: string;
   };
-  secrets: string[];
+  Secrets: string[];
 }
 
 export interface Workflow {
   Identifier: string;
-  on: 'push';
-  resolves: string | string[];
+  On: 'push';
+  Resolves: string | string[];
 }
 
 export interface WorkflowResponse {

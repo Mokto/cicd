@@ -15,7 +15,7 @@ class RabbitMQ {
 
   public async init(firstConnection = true) {
     try {
-      const url = `amqp://guest:jemtarwRqC8Ej2VCuk8xmTD0@cicd-rabbitmq-ha:5672`;
+      const url = `amqp://guest:guest@cicd-rabbitmq-ha:5672`;
 
       const connection = await amqplib.connect(url);
       connection.on('error', async (err: Error) => {
