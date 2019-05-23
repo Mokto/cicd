@@ -5,8 +5,7 @@ import { BuildAction, Build } from '../../models/build';
 import { cloneGithubProject } from '../git/latest';
 import { runKanikoStep } from '../runners/kaniko';
 import { patchOneBuild, insertOneBuild } from './dao';
-import { rabbitMQ } from '../../db/rabbitmq';
-import { watchBuildQueueName } from '../../queues/watch-build';
+import { sendBuildToQueue } from '../../queues/watch-build';
 
 export const getWorkflowsInformations = async () => {
   const workflowsString = await getWorkflows();
@@ -28,27 +27,17 @@ export const initBuild = async (workflowIdentifier: string) => {
     })),
   });
 
-  await rabbitMQ.db.sendToQueue(
-    watchBuildQueueName,
-    Buffer.from(
-      JSON.stringify({
-        buildId: build._id,
-      }),
-    ),
-    {
-      persistent: true,
-    },
-  );
+  await sendBuildToQueue(build._id);
 
   return build;
 };
 
 const runBuildAction = async (build: Build, buildAction: BuildAction) => {
-  const action = build.actions.find(action => buildAction.actionIdentifier === action.Identifier);
-  const buildActionIndex = build.buildActions.findIndex(b => b.actionIdentifier === buildAction.actionIdentifier);
+  const actionIdentifier = buildAction.actionIdentifier;
+  const action = build.actions.find(action => actionIdentifier === action.Identifier);
 
-  build = await patchOneBuild(build._id, {
-    [`buildActions.${buildActionIndex}.state`]: 'running',
+  build = await patchBuildStep(build, actionIdentifier, {
+    state: 'running',
   });
 
   let built = false;
@@ -58,7 +47,7 @@ const runBuildAction = async (build: Build, buildAction: BuildAction) => {
       built = true;
       break;
     case '@docker/build':
-      await runKanikoStep(build._id, action.Args[0]);
+      await runKanikoStep(build, actionIdentifier, action.Args[0]);
       break;
 
     default:
@@ -67,8 +56,8 @@ const runBuildAction = async (build: Build, buildAction: BuildAction) => {
   }
 
   if (built === true) {
-    build = await patchOneBuild(build._id, {
-      [`buildActions.${buildActionIndex}.state`]: 'completed',
+    build = await patchBuildStep(build, actionIdentifier, {
+      state: 'completed',
     });
     await continueWorkflow(build);
   }
@@ -96,16 +85,18 @@ const getNextActions = (build: Build): Action[] => {
     return getInitialBuildActions(build);
   }
 
-  const doneBuildActions = build.buildActions.filter(action => action.state === 'completed');
-  const doneBuildActionsIdentifiers = doneBuildActions.map(a => a.actionIdentifier);
-  const undoneBuildActions = build.actions.filter(
-    action => doneBuildActionsIdentifiers.indexOf(action.Identifier) === -1,
+  const doneOrRunningBuildActions = build.buildActions.filter(
+    action => action.state === 'completed' || action.state === 'running',
   );
-  return undoneBuildActions.filter(buildAction => {
+  const doneOrRunningBuildActionsIdentifiers = doneOrRunningBuildActions.map(a => a.actionIdentifier);
+  const undoneOrRunningBuildActions = build.actions.filter(
+    action => doneOrRunningBuildActionsIdentifiers.indexOf(action.Identifier) === -1,
+  );
+  return undoneOrRunningBuildActions.filter(buildAction => {
     if (typeof buildAction.Needs === 'string') {
       buildAction.Needs = [buildAction.Needs];
     }
-    return buildAction.Needs.every(need => doneBuildActionsIdentifiers.indexOf(need) > -1);
+    return buildAction.Needs.every(need => doneOrRunningBuildActionsIdentifiers.indexOf(need) > -1);
   });
 };
 
@@ -114,4 +105,13 @@ const getInitialBuildActions = (build: Build): Action[] => {
     build.workflow.Resolves = [build.workflow.Resolves];
   }
   return build.workflow.Resolves.map(actionIdentifier => build.actions.find(a => a.Identifier === actionIdentifier));
+};
+
+export const patchBuildStep = async (build: Build, actionIdentifier: string, data: any) => {
+  const buildActionIndex = build.buildActions.findIndex(b => b.actionIdentifier === actionIdentifier);
+  const update: any = {};
+  Object.keys(data).forEach((key: string) => {
+    update[`buildActions.${buildActionIndex}.${key}`] = data[key];
+  });
+  return patchOneBuild(build._id, update);
 };

@@ -31,3 +31,17 @@ export const loadBuildWatcher = async () => {
   await rabbitMQ.waitReady();
   listen();
 };
+
+export const sendBuildToQueue = async (buildId: string) => {
+  return rabbitMQ.db.sendToQueue(
+    watchBuildQueueName,
+    Buffer.from(
+      JSON.stringify({
+        buildId,
+      }),
+    ),
+    {
+      persistent: true,
+    },
+  );
+};

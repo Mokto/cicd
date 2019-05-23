@@ -13,6 +13,10 @@ export const findOneBuildById = async (_id: string): Promise<Build> => {
   return mongo.db.collection('builds').findOne({ _id: new ObjectId(_id) });
 };
 
+export const findOneBuildByJobName = async (jobName: string): Promise<Build> => {
+  return mongo.db.collection('builds').findOne({ buildActions: { $elemMatch: { jobName } } });
+};
+
 export const patchOneBuild = async (_id: string, updateValue: any): Promise<Build> => {
   const res = await mongo.db.collection('builds').findOneAndUpdate(
     { _id: new ObjectId(_id) },

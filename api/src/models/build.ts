@@ -16,6 +16,6 @@ export interface BuildAction {
   state: 'pending' | 'running' | 'completed' | 'failed';
   jobName?: string;
   podName?: string;
-  jobState?: 'pending' | 'running' | 'completed';
+  jobState?: 'Pending' | 'Running' | 'Succeeded';
   // logs: string;
 }

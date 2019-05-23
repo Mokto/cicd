@@ -16,7 +16,7 @@ const listen = async () => {
 
     await watchPodFromJob(content.jobName);
 
-    console.log('ACK');
+    console.log('ACK WATCH POD');
     rabbitMQ.db.ack(message);
   });
 
@@ -28,4 +28,18 @@ export const loadWatcher = async () => {
 
   await rabbitMQ.waitReady();
   listen();
+};
+
+export const sendPodWatcherToQueue = async (jobName: string) => {
+  return rabbitMQ.db.sendToQueue(
+    watchPodsQueueName,
+    Buffer.from(
+      JSON.stringify({
+        jobName,
+      }),
+    ),
+    {
+      persistent: true,
+    },
+  );
 };

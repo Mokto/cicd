@@ -3,6 +3,9 @@ import { config } from '../../config';
 // @ts-ignore
 import JSONStream from 'json-stream';
 import { deleteJob } from './deleteJob';
+import { findOneBuildByJobName } from '../builds/dao';
+import { patchBuildStep } from '../builds/service';
+import { sendBuildToQueue } from '../../queues/watch-build';
 
 export const watchPodFromJob = async (jobName: string) => {
   await k8s.waitReady();
@@ -16,17 +19,34 @@ export const watchPodFromJob = async (jobName: string) => {
   stream.pipe(jsonStream);
 
   return new Promise(resolve => {
-    jsonStream.on('data', (event: { type: string; object: any }) => {
+    jsonStream.on('data', async (event: { type: string; object: any }) => {
       const podName = event.object.metadata.name;
       const phase = event.object.status.phase;
-      console.log(podName, phase);
+      const jobName = podName
+        .split('-')
+        .slice(0, -1)
+        .join('-');
+
+      const build = await findOneBuildByJobName(jobName);
+      const actionIdentifier = build.buildActions.find(b => b.jobName === jobName).actionIdentifier;
+
+      console.log(`${actionIdentifier} //// ${phase}`);
+      await patchBuildStep(build, actionIdentifier, {
+        jobName,
+        podName,
+        jobState: phase,
+      });
 
       if (phase === 'Running') {
         watchPodLogs(podName);
       }
 
       if (phase === 'Succeeded') {
+        await patchBuildStep(build, actionIdentifier, {
+          state: 'completed',
+        });
         stream.abort();
+        await sendBuildToQueue(build._id);
         deleteJob(jobName, podName);
         resolve();
       }
@@ -45,6 +65,6 @@ export const watchPodLogs = async (podName: string) => {
     });
 
   stream.on('data', (data: any) => {
-    console.log(data.toString('utf8').replace(/\n/g, ''));
+    // console.log(data.toString('utf8').replace(/\n/g, ''));
   });
 };
