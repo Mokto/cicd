@@ -1,11 +1,14 @@
 import { Build } from '../../models/build';
 import { mongo } from '../../db/mongodb';
 import { ObjectId } from 'bson';
+import * as WebSocket from 'ws';
+import { sendWebsocketMessage } from '../../sockets';
 
 export const insertOneBuild = async (build: Partial<Build>): Promise<Build> => {
   build.createdAt = new Date();
   build.updatedAt = new Date();
   const res = await mongo.db.collection('builds').insertOne(build);
+  notifyBuildChange();
   return res.ops[0];
 };
 
@@ -28,5 +31,18 @@ export const patchOneBuild = async (_id: string, updateValue: any): Promise<Buil
     },
     { returnOriginal: false },
   );
+  notifyBuildChange();
   return res.value;
+};
+
+export const getLastOrActiveBuilds = async (): Promise<Build[]> => {
+  return mongo.db
+    .collection('builds')
+    .find({})
+    .toArray();
+};
+
+export const notifyBuildChange = async (ws?: WebSocket) => {
+  const builds = await getLastOrActiveBuilds();
+  sendWebsocketMessage('builds', builds, ws);
 };

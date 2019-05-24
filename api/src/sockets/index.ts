@@ -1,4 +1,7 @@
 import * as WebSocket from 'ws';
+import { notifyBuildChange } from '../modules/builds/dao';
+
+const connections: WebSocket[] = [];
 
 export const loadWebsocketServer = () => {
   const wss = new WebSocket.Server({
@@ -24,8 +27,24 @@ export const loadWebsocketServer = () => {
     //   }
   });
 
-  wss.on('connection', () => {
-    console.log('client connected');
+  wss.on('connection', ws => {
+    connections.push(ws);
+
+    ws.onclose = () => {
+      connections.splice(connections.indexOf(ws), 1);
+    };
+
+    notifyBuildChange(ws);
   });
+
   console.log('Websocket server started on port 8081');
+};
+
+export const sendWebsocketMessage = (eventName: string, data: any, ws?: WebSocket) => {
+  const dataSent = JSON.stringify({ eventName, data });
+
+  if (ws) {
+    return ws.send(dataSent);
+  }
+  connections.forEach(c => c.send(dataSent));
 };

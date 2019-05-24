@@ -5,7 +5,6 @@ import { AppLayout } from './layout';
 import { startBuildApi, getWorkflowsApi } from './api';
 import { useAsyncEffect } from './effects/async';
 import { WorkflowResponse } from '../../api/src/models/workflows';
-import { websocket } from './services/websocket';
 
 export const App: React.FC = (): ReactElement => {
   const [workflowsDefinition, setWorkflowsDefinition] = useState<WorkflowResponse>();
@@ -13,10 +12,6 @@ export const App: React.FC = (): ReactElement => {
   useAsyncEffect(async () => {
     const result = await getWorkflowsApi();
     setWorkflowsDefinition(result);
-  }, []);
-
-  useAsyncEffect(async () => {
-    console.log(websocket);
   }, []);
 
   return (
