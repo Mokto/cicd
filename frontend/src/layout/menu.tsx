@@ -14,7 +14,7 @@ export const AppMenu: FunctionComponent = () => {
     });
   }, []);
 
-  // console.log(builds);
+  console.log(builds);
 
   return (
     <Sider width={300} style={{ background: '#fff' }}>
@@ -23,7 +23,9 @@ export const AppMenu: FunctionComponent = () => {
       {builds && (
         <div>
           {builds.map(build => (
-            <div key={build._id}>{build._id}</div>
+            <div key={build._id}>
+              {build.workflowIdentifier} - {build.state}
+            </div>
           ))}
         </div>
       )}
