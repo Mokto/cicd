@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { WorkflowResponse } from '../../../api/src/models/workflows';
+import { WorkflowResponse } from '../../../common/models/workflows';
 
 export const startBuildApi = async (workflowIdentifier: string) => {
   return axios('http://localhost:8080/build', {

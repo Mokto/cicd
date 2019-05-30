@@ -1,7 +1,8 @@
 import { rabbitMQ } from '../db/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
-import { findOneBuildById } from '../modules/builds/dao';
-import { continueWorkflow } from '../modules/builds/service';
+import { findOneBuildById } from 'api/src/modules/builds/dao';
+import { continueWorkflow } from '@modules/builds/service';
+import '@common/test';
 
 export const watchBuildQueueName = 'watch';
 
