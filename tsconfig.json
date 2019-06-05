@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "@common/*": ["src/common/*"],
+        "@api/*": ["src/api/src/*"],
+      },
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "jsx": "preserve",
+      "lib": ["dom", "es2017"],
+      "module": "esnext",
+      "moduleResolution": "node",
+      // "noEmit": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": true,
+      "preserveConstEnums": true,
+      "removeComments": false,
+      "skipLibCheck": true,
+      "sourceMap": true,
+      "strict": true,
+      "target": "esnext",
+      "strictNullChecks": false,
+      "resolveJsonModule": true,
+      "noImplicitThis": false,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
+    }
+  }
+  

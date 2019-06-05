@@ -3,15 +3,15 @@ kind: Config
 build:
   artifacts:
   - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-api
-    context: ./src
+    context: .
     sync:
       manual:
-      - src: api/src/**/*
+      - src: src/api/src/**/*
         dest: .
-      - src: common/**/*
+      - src: src/common/**/*
         dest: .
     docker:
-      dockerfile: api/Dockerfile.dev
+      dockerfile: src/api/Dockerfile.dev
       buildArgs:
         SCRIPT: '{{.SCRIPT}}'
   - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-go
@@ -21,16 +21,16 @@ build:
       buildArgs:
         SCRIPT: '{{.SCRIPT}}'
   - image: 365165116898.dkr.ecr.eu-west-1.amazonaws.com/skaffold-frontend
-    context: ./src
+    context: .
     docker:
-      dockerfile: frontend/Dockerfile.dev
+      dockerfile: src/frontend/Dockerfile.dev
       buildArgs:
         SCRIPT: "{{.SCRIPT}}"
     sync:
       manual:
-      - src: 'frontend/src/**/*.ts'
+      - src: src/frontend/src/**/*
         dest: .
-      - src: common/**/*
+      - src: src/common/**/*
         dest: .
 deploy:
   kubectl:

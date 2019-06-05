@@ -7,13 +7,13 @@ ENV SCRIPT ${SCRIPT}
 WORKDIR /opt/backend
 EXPOSE 3000
 
-ADD api/package.json .
-ADD api/package-lock.json .
-RUN npm install
+ADD src/api/package.json ./src/api/package.json
+ADD src/api/package-lock.json ./src/api/package-lock.json
+RUN cd src/api && npm install
 
-COPY ./api/tsconfig.json ./
-COPY ./api/webpack.config.js ./
-COPY ./api/src ./src
-COPY ./common ./common
+COPY ./tsconfig.json .
+COPY ./src/api ./src/api
+COPY ./src/common ./src/common
 
+WORKDIR /opt/backend/src/api
 CMD npx webpack --watch

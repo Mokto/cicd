@@ -1,4 +1,4 @@
-FROM node:8.12.0-alpine
+FROM node:12
 
 ARG SCRIPT
 ENV SCRIPT ${SCRIPT}
@@ -6,12 +6,13 @@ WORKDIR /opt/frontend
 EXPOSE 3000
 CMD ["npm", "start"]
 
-COPY frontend/package.json .
-COPY frontend/package-lock.json .
-RUN npm install
+ADD src/frontend/package.json ./src/frontend/package.json
+ADD src/frontend/package-lock.json ./src/frontend/package-lock.json
+RUN cd src/frontend && npm install
 
+COPY ./tsconfig.json .
+COPY ./src/frontend ./src/frontend
+COPY ./src/common ./src/common
 
-COPY ./frontend/tsconfig.json ./
-COPY ./frontend/src ./src
-COPY ./frontend/public ./public
-COPY ./common ./common
+WORKDIR /opt/frontend/src/frontend
+

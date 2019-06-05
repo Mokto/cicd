@@ -4,7 +4,7 @@ import { Button, Divider } from 'antd';
 import { AppLayout } from './layout';
 import { startBuildApi, getWorkflowsApi } from './api';
 import { useAsyncEffect } from './effects/async';
-import { WorkflowResponse } from '../../api/src/models/workflows';
+import { WorkflowResponse } from '@common/models/workflows';
 import { websocket } from './services/websocket';
 
 export const App: React.FC = (): ReactElement => {

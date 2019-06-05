@@ -1,4 +1,4 @@
-import { WorkflowResponse } from '../../../../common/models/workflows';
+import { WorkflowResponse } from '@common/models/workflows';
 
 import * as grpc from 'grpc';
 import * as protoLoader from '@grpc/proto-loader';
