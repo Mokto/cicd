@@ -1,7 +1,7 @@
 import { getWorkflows } from '../../utils/load-workflows';
 import { parseWorkflow } from '../grpc';
-import { Action } from '../../models/workflows';
-import { BuildAction, Build } from '../../models/build';
+import { Action } from '@common/models/workflows';
+import { BuildAction, Build } from '@common/models/build';
 import { cloneGithubProject } from '../git/latest';
 import { runKanikoStep } from '../runners/kaniko';
 import { patchOneBuild, insertOneBuild } from './dao';

@@ -1,5 +1,5 @@
-import { Build } from '../../models/build';
-import { mongo } from '../../db/mongodb';
+import { Build } from '@common/models/build';
+import { mongo } from '@api/db/mongodb';
 import { ObjectId } from 'bson';
 
 export const insertOneBuild = async (build: Partial<Build>): Promise<Build> => {

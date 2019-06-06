@@ -1,0 +1,18 @@
+FROM node:12
+
+ARG SCRIPT
+ENV SCRIPT ${SCRIPT}
+WORKDIR /opt/frontend
+EXPOSE 3000
+CMD ["npm", "start"]
+
+ADD src/frontend/package.json ./src/frontend/package.json
+ADD src/frontend/package-lock.json ./src/frontend/package-lock.json
+RUN cd src/frontend && npm install
+
+COPY ./tsconfig.json .
+COPY ./src/frontend ./src/frontend
+COPY ./src/common ./src/common
+
+WORKDIR /opt/frontend/src/frontend
+

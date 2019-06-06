@@ -1,5 +1,5 @@
 import { runDockerStep } from '../runDockerStep';
-import { Build } from '../../../models/build';
+import { Build } from '@common/models/build';
 import { patchBuildStep } from '../../builds/service';
 
 export const runKanikoStep = async (build: Build, actionIdentifier: string, imageName: string) => {

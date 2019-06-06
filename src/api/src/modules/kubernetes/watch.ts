@@ -65,6 +65,7 @@ export const watchPodLogs = async (podName: string) => {
     });
 
   stream.on('data', (data: any) => {
+    console.log(data);
     // console.log(data.toString('utf8').replace(/\n/g, ''));
   });
 };

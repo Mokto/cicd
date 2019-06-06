@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -27,3 +28,4 @@
     "src/protos/*.js"
   ]
 }
+

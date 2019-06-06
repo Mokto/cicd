@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
@@ -16,6 +17,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      '@common': path.resolve(__dirname, '../common/'),
+      '@api': path.resolve(__dirname, 'src'),
+    },
   },
   module: {
     rules: [
