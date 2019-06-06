@@ -19,12 +19,5 @@ export const loadRoutes = (router: Router) => {
     res.send(build);
   });
 
-  // console.log('-----------------');
-  // console.log('-----------------');
-  // console.log('-----------------');
-  // console.log('-----------------');
-  // console.log('-----------------');
-  // console.log('-----------------');
-
   return router;
 };
